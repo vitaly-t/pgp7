@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>pg-promise API</title>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-pg-promise.html">pg-promise</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-PG.html">PG</a></li><li><a href="external-pg-minify.html">pg-minify</a></li><li><a href="external-pg-pool.html">pg-pool</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-RangeError.html">RangeError</a></li><li><a href="external-spex.html">spex</a></li><li><a href="external-Stream.html">Stream</a></li><li><a href="external-TypeError.html">TypeError</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a></li><li><a href="errors.ParameterizedQueryError.html">ParameterizedQueryError</a></li><li><a href="errors.PreparedStatementError.html">PreparedStatementError</a></li><li><a href="errors.QueryFileError.html">QueryFileError</a></li><li><a href="errors.QueryResultError.html">QueryResultError</a></li><li><a href="helpers.Column.html">Column</a></li><li><a href="helpers.ColumnSet.html">ColumnSet</a></li><li><a href="helpers.TableName.html">TableName</a></li><li><a href="ParameterizedQuery.html">ParameterizedQuery</a></li><li><a href="PreparedStatement.html">PreparedStatement</a></li><li><a href="PromiseAdapter.html">PromiseAdapter</a></li><li><a href="QueryFile.html">QueryFile</a></li><li><a href="txMode.TransactionMode.html">TransactionMode</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:connect">connect</a></li><li><a href="global.html#event:disconnect">disconnect</a></li><li><a href="global.html#event:error">error</a></li><li><a href="global.html#event:extend">extend</a></li><li><a href="global.html#event:query">query</a></li><li><a href="global.html#event:receive">receive</a></li><li><a href="global.html#event:task">task</a></li><li><a href="global.html#event:transact">transact</a></li></ul><h3>Namespaces</h3><ul><li><a href="errors.html">errors</a></li><li><a href="formatting.html">formatting</a></li><li><a href="helpers.html">helpers</a></li><li><a href="txMode.html">txMode</a></li><li><a href="utils.html">utils</a></li></ul><h3>Interfaces</h3><ul><li><a href="Task.html">Task</a></li></ul><h3>Global</h3><ul><li><a href="global.html#queryResult">queryResult</a></li></ul>
+    <div class="home-link">
+        <a href="https://github.com/vitaly-t/pg-promise">&lt;&lt; GitHub</a>
+    </div>
+</nav>
+
+<div id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const npm = {
+    os: require('os'),
+    utils: require('../utils'),
+    QueryFileError: require('./queryFile')
+};
+
+/**
+ * @class errors.ParameterizedQueryError
+ * @augments external:Error
+ * @description
+ * {@link errors.ParameterizedQueryError ParameterizedQueryError} class, available from the {@link errors} namespace.
+ *
+ * This type represents all errors that can be reported by class {@link ParameterizedQuery}, whether it is used
+ * explicitly or implicitly (via a simple `{text, values}` object).
+ *
+ * @property {string} name
+ * Standard {@link external:Error Error} property - error type name = `ParameterizedQueryError`.
+ *
+ * @property {string} message
+ * Standard {@link external:Error Error} property - the error message.
+ *
+ * @property {string} stack
+ * Standard {@link external:Error Error} property - the stack trace.
+ *
+ * @property {errors.QueryFileError} error
+ * Internal {@link errors.QueryFileError} object.
+ *
+ * It is set only when the source {@link ParameterizedQuery} used a {@link QueryFile} which threw the error.
+ *
+ * @property {object} result
+ * Resulting Parameterized Query object.
+ *
+ * @see ParameterizedQuery
+ */
+function ParameterizedQueryError(error, ps) {
+    const temp = Error.apply(this, arguments);
+    temp.name = this.name = 'ParameterizedQueryError';
+    this.stack = temp.stack;
+    if (error instanceof npm.QueryFileError) {
+        this.error = error;
+        this.message = 'Failed to initialize \'text\' from a QueryFile.';
+    } else {
+        this.message = error;
+    }
+    this.result = ps;
+}
+
+ParameterizedQueryError.prototype = Object.create(Error.prototype, {
+    constructor: {
+        value: ParameterizedQueryError,
+        writable: true,
+        configurable: true
+    }
+});
+
+/**
+ * @method errors.ParameterizedQueryError#toString
+ * @description
+ * Creates a well-formatted multi-line string that represents the error.
+ *
+ * It is called automatically when writing the object into the console.
+ *
+ * @param {number} [level=0]
+ * Nested output level, to provide visual offset.
+ *
+ * @returns {string}
+ */
+ParameterizedQueryError.prototype.toString = function (level) {
+    level = level > 0 ? parseInt(level) : 0;
+    const gap0 = npm.utils.messageGap(level),
+        gap1 = npm.utils.messageGap(level + 1),
+        gap2 = npm.utils.messageGap(level + 2),
+        lines = [
+            'ParameterizedQueryError {',
+            gap1 + 'message: "' + this.message + '"',
+            gap1 + 'result: {',
+            gap2 + 'text: ' + JSON.stringify(this.result.text),
+            gap2 + 'values: ' + JSON.stringify(this.result.values),
+            gap1 + '}'
+        ];
+    if (this.error) {
+        lines.push(gap1 + 'error: ' + this.error.toString(level + 1));
+    }
+    lines.push(gap0 + '}');
+    return lines.join(npm.os.EOL);
+};
+
+ParameterizedQueryError.prototype.inspect = function () {
+    return this.toString();
+};
+
+module.exports = ParameterizedQueryError;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

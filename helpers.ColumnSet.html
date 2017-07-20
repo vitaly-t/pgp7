@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>pg-promise API</title>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-pg-promise.html">pg-promise</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-PG.html">PG</a></li><li><a href="external-pg-minify.html">pg-minify</a></li><li><a href="external-pg-pool.html">pg-pool</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-RangeError.html">RangeError</a></li><li><a href="external-spex.html">spex</a></li><li><a href="external-Stream.html">Stream</a></li><li><a href="external-TypeError.html">TypeError</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a></li><li><a href="errors.ParameterizedQueryError.html">ParameterizedQueryError</a></li><li><a href="errors.PreparedStatementError.html">PreparedStatementError</a></li><li><a href="errors.QueryFileError.html">QueryFileError</a></li><li><a href="errors.QueryResultError.html">QueryResultError</a></li><li><a href="helpers.Column.html">Column</a></li><li><a href="helpers.ColumnSet.html">ColumnSet</a></li><li><a href="helpers.TableName.html">TableName</a></li><li><a href="ParameterizedQuery.html">ParameterizedQuery</a></li><li><a href="PreparedStatement.html">PreparedStatement</a></li><li><a href="PromiseAdapter.html">PromiseAdapter</a></li><li><a href="QueryFile.html">QueryFile</a></li><li><a href="txMode.TransactionMode.html">TransactionMode</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:connect">connect</a></li><li><a href="global.html#event:disconnect">disconnect</a></li><li><a href="global.html#event:error">error</a></li><li><a href="global.html#event:extend">extend</a></li><li><a href="global.html#event:query">query</a></li><li><a href="global.html#event:receive">receive</a></li><li><a href="global.html#event:task">task</a></li><li><a href="global.html#event:transact">transact</a></li></ul><h3>Namespaces</h3><ul><li><a href="errors.html">errors</a></li><li><a href="formatting.html">formatting</a></li><li><a href="helpers.html">helpers</a></li><li><a href="txMode.html">txMode</a></li><li><a href="utils.html">utils</a></li></ul><h3>Interfaces</h3><ul><li><a href="Task.html">Task</a></li></ul><h3>Global</h3><ul><li><a href="global.html#queryResult">queryResult</a></li></ul>
+    <div class="home-link">
+        <a href="https://github.com/vitaly-t/pg-promise">&lt;&lt; GitHub</a>
+    </div>
+</nav>
+
+<div id="main">
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="helpers.html">helpers</a>.</span>ColumnSet</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="ColumnSet"><span class="type-signature"></span>new ColumnSet<span class="signature">(columns, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="helpers.ColumnSet.html">helpers.ColumnSet</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Performance-optimized, read-only structure with query-formatting columns.</p>
+<p>For performance-oriented applications this type should be created globally, to be reused by all methods.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>columns</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+|
+
+<span class="param-type"><a href="helpers.Column.html">helpers.Column</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Columns information object, depending on the type:</p>
+<ul>
+<li><p>When it is a simple object, its properties are enumerated to represent both column names and property names
+within the source objects. See also option <code>inherit</code> that's applicable in this case.</p>
+</li>
+<li><p>When it is a single <a href="helpers.Column.html">Column</a> object, property <a href="helpers.ColumnSet.html#columns">columns</a> is initialized with
+just a single column. It is not a unique situation when only a single column is required for an update operation.</p>
+</li>
+<li><p>When it is an array, each element is assumed to represent details for a column. If the element is already of type <a href="helpers.Column.html">Column</a>,
+it is used directly; otherwise the element is passed into <a href="helpers.Column.html">Column</a> constructor for initialization.
+On any duplicate column name (case-sensitive) it will throw <a href="external-Error.html">Error</a> = <code>Duplicate column name &quot;name&quot;.</code></p>
+</li>
+<li><p>When it is none of the above, it will throw <a href="external-TypeError.html">TypeError</a> = <code>Invalid parameter 'columns' specified.</code></p>
+</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>table</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="helpers.TableName.html">helpers.TableName</a></span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Table details.</p>
+<p>When it is a non-null value, and not a <a href="helpers.TableName.html">TableName</a> object, a new <a href="helpers.TableName.html">TableName</a> is constructed from the value.</p>
+<p>It can be used as the default for methods <a href="helpers.html#.insert">insert</a> and <a href="helpers.html#.update">update</a> when their parameter
+<code>table</code> is omitted, and for logging purposes.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inherit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Use inherited properties in addition to the object's own properties.</p>
+<p>By default, only the object's own properties are enumerated for column names.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="helpers.ColumnSet.html#columns">columns</a>,<a href="helpers.ColumnSet.html#names">names</a>,<a href="helpers.ColumnSet.html#table">table</a>,<a href="helpers.ColumnSet.html#variables">variables</a> |<a href="helpers.ColumnSet.html#assign">assign</a>,<a href="helpers.ColumnSet.html#extend">extend</a>,<a href="helpers.ColumnSet.html#merge">merge</a>,<a href="helpers.ColumnSet.html#prepare">prepare</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="helpers.ColumnSet.html">helpers.ColumnSet</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// A complex insert/update object scenario for table 'purchases' in schema 'fiscal'.// For a good performance, you should declare such objects once and then reuse them.//// Column Requirements://// 1. Property 'id' is only to be used for a WHERE condition in updates// 2. Property 'list' needs to be formatted as a csv// 3. Property 'code' is to be used as raw text, and to be defaulted to 0 when the//    property is missing in the source object// 4. Property 'log' is a JSON object with 'log-entry' for the column name// 5. Property 'data' requires SQL type casting '::int[]'// 6. Property 'amount' needs to be set to 100, if it is 0// 7. Property 'total' must be skipped during updates, if 'amount' was 0, plus its//    column name is 'total-val'const cs = new pgp.helpers.ColumnSet([    '?id', // ColumnConfig equivalent: {name: 'id', cnd: true}    'list:csv', // ColumnConfig equivalent: {name: 'list', mod: ':csv'}    {        name: 'code',        mod: '^', // format as raw text        def: 0 // default to 0 when the property doesn't exist    },    {        name: 'log-entry',        prop: 'log',        mod: ':json' // format as JSON    },    {        name: 'data',        cast: 'int[]' // use SQL type casting '::int[]'    },    {        name: 'amount',        init: col => {            // set to 100, if the value is 0:            return col.value === 0 ? 100 : col.value;        }    },    {        name: 'total-val',        prop: 'total',        skip: col => {            // skip from updates, if 'amount' is 0:            return col.source.amount === 0;        }    }], {table: {table: 'purchases', schema: 'fiscal'}});// Alternatively, you could take the table declaration out:// const table = new pgp.helpers.TableName('purchases', 'fiscal');console.log(cs); // console output for the object://=>// ColumnSet {//    table: "fiscal"."purchases"//    columns: [//        Column {//            name: "id"//            cnd: true//        }//        Column {//            name: "list"//            mod: ":csv"//        }//        Column {//            name: "code"//            mod: "^"//            def: 0//        }//        Column {//            name: "log-entry"//            prop: "log"//            mod: ":json"//        }//        Column {//            name: "data"//            cast: "int[]"//        }//        Column {//            name: "amount"//            init: [Function]//        }//        Column {//            name: "total-val"//            prop: "total"//            skip: [Function]//        }//    ]// }</code></pre>
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="columns"><span class="type-signature">(readonly) </span>columns<span class="type-signature"> :Array.&lt;<a href="helpers.Column.html">helpers.Column</a>></span></h4>
+
+
+
+
+<div class="description">
+    <p>Array of <a href="helpers.Column.html">Column</a> objects.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;<a href="helpers.Column.html">helpers.Column</a>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line193">line 193</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="names"><span class="type-signature">(readonly) </span>names<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p><strong>Added in v5.5.5</strong></p>
+<p>Returns a string - comma-separated list of all column names, properly escaped.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line235">line 235</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const cs = new ColumnSet(['id^', {name: 'cells', cast: 'int[]'}, 'doc:json']);console.log(cs.names);//=> "id","cells","doc"</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="table"><span class="type-signature">(readonly) </span>table<span class="type-signature"> :<a href="helpers.TableName.html">helpers.TableName</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Destination table. It can be specified for two purposes:</p>
+<ul>
+<li><strong>primary:</strong> to be used as the default table when it is omitted during a call into methods <a href="helpers.html#.insert">insert</a> and <a href="helpers.html#.update">update</a></li>
+<li><strong>secondary:</strong> to be automatically written into the console (for logging purposes).</li>
+</ul>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="helpers.TableName.html">helpers.TableName</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line181">line 181</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="variables"><span class="type-signature">(readonly) </span>variables<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p><strong>Added in v5.5.5</strong></p>
+<p>Returns a string - formatting template for all column values.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line258">line 258</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="helpers.ColumnSet.html#assign">assign</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const cs = new ColumnSet(['id^', {name: 'cells', cast: 'int[]'}, 'doc:json']);console.log(cs.variables);//=> ${id^},${cells}::int[],${doc:json}</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="assign"><span class="type-signature"></span>assign<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p><strong> Added in v5.9.0 </strong></p>
+<p>Returns a formatting template of SET assignments, either generic or for a single object.</p>
+<p>The method is optimized to cache the output string when there are no columns that can be skipped dynamically.</p>
+<p>This method is primarily for internal use, that's why it does not validate the input.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Assignment/formatting options.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>source</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Source - a single object that contains values for columns.</p>
+<p>The object is only necessary to correctly apply the logic of skipping columns dynamically, based on the source data
+and the rules defined in the <a href="helpers.ColumnSet.html">ColumnSet</a>. If, however, you do not care about that, then you do not need to specify any object.</p>
+<p>Note that even if you do not specify the object, the columns marked as conditional (<code>cnd: true</code>) will always be skipped.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>In cases where needed, an alias prefix to be added before each column.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line283">line 283</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="helpers.ColumnSet.html#variables">variables</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Comma-separated list of variable-to-column assignments.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const cs = new pgp.helpers.ColumnSet([    '?first', // = {name: 'first', cnd: true}    'second:json',    {name: 'third', mod: ':raw', cast: 'text'}]);cs.assign();//=> "second"=${second:json},"third"=${third:raw}::textcs.assign({prefix: 'a b c'});//=> "a b c"."second"=${second:json},"a b c"."third"=${third:raw}::text</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="extend"><span class="type-signature"></span>extend<span class="signature">(columns)</span><span class="type-signature"> &rarr; {<a href="helpers.ColumnSet.html">helpers.ColumnSet</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Creates a new <a href="helpers.ColumnSet.html">ColumnSet</a>, by joining the two sets of columns.</p>
+<p>If the two sets contain a column with the same <code>name</code> (case-sensitive), an error is thrown.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>columns</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="helpers.Column.html">helpers.Column</a></span>
+|
+
+<span class="param-type"><a href="helpers.ColumnSet.html">helpers.ColumnSet</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Columns to be appended, of the same type as parameter <code>columns</code> during <a href="helpers.ColumnSet.html">ColumnSet</a> construction, except:</p>
+<ul>
+<li>it can also be of type <a href="helpers.ColumnSet.html">ColumnSet</a></li>
+<li>it cannot be a simple object (properties enumeration is not supported here)</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line359">line 359</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="helpers.Column.html">Column</a>,<a href="helpers.ColumnSet.html#merge">merge</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>New <a href="helpers.ColumnSet.html">ColumnSet</a> object with the extended/concatenated list of columns.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="helpers.ColumnSet.html">helpers.ColumnSet</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const pgp = require('pg-promise')();const cs = new pgp.helpers.ColumnSet(['one', 'two'], {table: 'my-table'});console.log(cs);//=>// ColumnSet {//    table: "my-table"//    columns: [//        Column {//            name: "one"//        }//        Column {//            name: "two"//        }//    ]// }const csExtended = cs.extend(['three']);console.log(csExtended);//=>// ColumnSet {//    table: "my-table"//    columns: [//        Column {//            name: "one"//        }//        Column {//            name: "two"//        }//        Column {//            name: "three"//        }//    ]// }</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="merge"><span class="type-signature"></span>merge<span class="signature">(columns)</span><span class="type-signature"> &rarr; {<a href="helpers.ColumnSet.html">helpers.ColumnSet</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Creates a new <a href="helpers.ColumnSet.html">ColumnSet</a>, by joining the two sets of columns.</p>
+<p>Items in <code>columns</code> with the same <code>name</code> (case-sensitive) override the original columns.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>columns</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="helpers.Column.html">helpers.Column</a></span>
+|
+
+<span class="param-type"><a href="helpers.ColumnSet.html">helpers.ColumnSet</a></span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Columns to be appended, of the same type as parameter <code>columns</code> during <a href="helpers.ColumnSet.html">ColumnSet</a> construction, except:</p>
+<ul>
+<li>it can also be of type <a href="helpers.ColumnSet.html">ColumnSet</a></li>
+<li>it cannot be a simple object (properties enumeration is not supported here)</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line423">line 423</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="helpers.Column.html">Column</a>,<a href="helpers.ColumnSet.html#extend">extend</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>New <a href="helpers.ColumnSet.html">ColumnSet</a> object with the merged list of columns.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="helpers.ColumnSet.html">helpers.ColumnSet</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const pgp = require('pg-promise')();const cs = new pgp.helpers.ColumnSet(['?one', 'two:json'], {table: 'my-table'});console.log(cs);//=>// ColumnSet {//    table: "my-table"//    columns: [//        Column {//            name: "one"//            cnd: true//        }//        Column {//            name: "two"//            mod: ":json"//        }//    ]// }const csMerged = cs.merge(['two', 'three^']);console.log(csMerged);//=>// ColumnSet {//    table: "my-table"//    columns: [//        Column {//            name: "one"//            cnd: true//        }//        Column {//            name: "two"//        }//        Column {//            name: "three"//            mod: "^"//        }//    ]// }</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="prepare"><span class="type-signature"></span>prepare<span class="signature">(source)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p><strong>Added in v5.5.6</strong></p>
+<p>Prepares a source object to be formatted, by cloning it and applying the rules as set by the
+columns configuration.</p>
+<p>This method is primarily for internal use, that's why it does not validate the input parameters.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>source</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The source object to be prepared, if required.</p>
+<p>It must be a non-<code>null</code> object, which the method does not validate, as it is
+intended primarily for internal use by the library.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line503">line 503</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>When the object needs to be prepared, the method returns a clone of the source object,
+with all properties and values set according to the columns configuration.</p>
+<p>When the object does not need to be prepared, the original object is returned.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">(level<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Creates a well-formatted multi-line string that represents the object.</p>
+<p>It is called automatically when writing the object into the console.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>level</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last"><p>Nested output level, to provide visual offset.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="helpers_columnSet.js.html">helpers/columnSet.js</a>, <a href="helpers_columnSet.js.html#line560">line 560</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

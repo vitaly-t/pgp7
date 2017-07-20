@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>pg-promise API</title>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-pg-promise.html">pg-promise</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-PG.html">PG</a></li><li><a href="external-pg-minify.html">pg-minify</a></li><li><a href="external-pg-pool.html">pg-pool</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-RangeError.html">RangeError</a></li><li><a href="external-spex.html">spex</a></li><li><a href="external-Stream.html">Stream</a></li><li><a href="external-TypeError.html">TypeError</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a></li><li><a href="errors.ParameterizedQueryError.html">ParameterizedQueryError</a></li><li><a href="errors.PreparedStatementError.html">PreparedStatementError</a></li><li><a href="errors.QueryFileError.html">QueryFileError</a></li><li><a href="errors.QueryResultError.html">QueryResultError</a></li><li><a href="helpers.Column.html">Column</a></li><li><a href="helpers.ColumnSet.html">ColumnSet</a></li><li><a href="helpers.TableName.html">TableName</a></li><li><a href="ParameterizedQuery.html">ParameterizedQuery</a></li><li><a href="PreparedStatement.html">PreparedStatement</a></li><li><a href="PromiseAdapter.html">PromiseAdapter</a></li><li><a href="QueryFile.html">QueryFile</a></li><li><a href="txMode.TransactionMode.html">TransactionMode</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:connect">connect</a></li><li><a href="global.html#event:disconnect">disconnect</a></li><li><a href="global.html#event:error">error</a></li><li><a href="global.html#event:extend">extend</a></li><li><a href="global.html#event:query">query</a></li><li><a href="global.html#event:receive">receive</a></li><li><a href="global.html#event:task">task</a></li><li><a href="global.html#event:transact">transact</a></li></ul><h3>Namespaces</h3><ul><li><a href="errors.html">errors</a></li><li><a href="formatting.html">formatting</a></li><li><a href="helpers.html">helpers</a></li><li><a href="txMode.html">txMode</a></li><li><a href="utils.html">utils</a></li></ul><h3>Interfaces</h3><ul><li><a href="Task.html">Task</a></li></ul><h3>Global</h3><ul><li><a href="global.html#queryResult">queryResult</a></li></ul>
+    <div class="home-link">
+        <a href="https://github.com/vitaly-t/pg-promise">&lt;&lt; GitHub</a>
+    </div>
+</nav>
+
+<div id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const npm = {
+    ColumnSet: require('../columnSet'),
+    format: require('../../formatting').as.format,
+    utils: require('../../utils')
+};
+
+/**
+ * @method helpers.sets
+ * @description
+ * Generates a string of comma-separated value-set statements from a single object: `col1=val1, col2=val2, ...`,
+ * to be used as part of a query.
+ *
+ * Since it is to be used as part of `UPDATE` queries, {@link helpers.Column Column} properties `cnd` and `skip` apply.
+ *
+ * @param {object} data
+ * A simple, non-null and non-array source object.
+ *
+ * If it is anything else, the method will throw {@link external:TypeError TypeError} = `Invalid parameter 'data' specified.`
+ *
+ * @param {array|helpers.Column|helpers.ColumnSet} [columns]
+ * Columns for which to set values.
+ *
+ * When not specified, properties of the `data` object are used.
+ *
+ * When no effective columns are found, an empty string is returned.
+ *
+ * @returns {string}
+ * - comma-separated value-set statements for the `data` object
+ * - an empty string, if no effective columns found
+ *
+ * @see
+ *  {@link helpers.Column Column},
+ *  {@link helpers.ColumnSet ColumnSet}
+ *
+ * @example
+ *
+ * const pgp = require('pg-promise')();
+ *
+ * const data = {id: 1, val: 123, msg: 'hello'};
+ *
+ * // Properties can be pulled automatically from the object:
+ *
+ * pgp.helpers.sets(data);
+ * //=> "id"=1,"val"=123,"msg"='hello'
+ *
+ * @example
+ *
+ * // Column details from a reusable ColumnSet (recommended for performance);
+ * // NOTE: Conditional columns (start with '?') are skipped:
+ *
+ * const cs = new pgp.helpers.ColumnSet(['?id','val', 'msg']);
+ *
+ * pgp.helpers.sets(data, cs);
+ * //=> "val"=123,"msg"='hello'
+ *
+ */
+function sets(data, columns) {
+
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        throw new TypeError('Invalid parameter \'data\' specified.');
+    }
+
+    if (!(columns instanceof npm.ColumnSet)) {
+        columns = new npm.ColumnSet(columns || data);
+    }
+
+    return npm.format(columns.assign({source: data}), columns.prepare(data));
+}
+
+module.exports = sets;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
