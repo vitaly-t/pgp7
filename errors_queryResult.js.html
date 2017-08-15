@@ -13,7 +13,7 @@
 <body>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-pg-promise.html">pg-promise</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a></li><li><a href="errors.ParameterizedQueryError.html">ParameterizedQueryError</a></li><li><a href="errors.PreparedStatementError.html">PreparedStatementError</a></li><li><a href="errors.QueryFileError.html">QueryFileError</a></li><li><a href="errors.QueryResultError.html">QueryResultError</a></li><li><a href="helpers.Column.html">Column</a></li><li><a href="helpers.ColumnSet.html">ColumnSet</a></li><li><a href="helpers.TableName.html">TableName</a></li><li><a href="ParameterizedQuery.html">ParameterizedQuery</a></li><li><a href="PreparedStatement.html">PreparedStatement</a></li><li><a href="PromiseAdapter.html">PromiseAdapter</a></li><li><a href="QueryFile.html">QueryFile</a></li><li><a href="txMode.TransactionMode.html">TransactionMode</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:connect">connect</a></li><li><a href="global.html#event:disconnect">disconnect</a></li><li><a href="global.html#event:error">error</a></li><li><a href="global.html#event:extend">extend</a></li><li><a href="global.html#event:query">query</a></li><li><a href="global.html#event:receive">receive</a></li><li><a href="global.html#event:task">task</a></li><li><a href="global.html#event:transact">transact</a></li></ul><h3>Namespaces</h3><ul><li><a href="errors.html">errors</a></li><li><a href="formatting.html">formatting</a></li><li><a href="helpers.html">helpers</a></li><li><a href="txMode.html">txMode</a></li><li><a href="utils.html">utils</a></li></ul><h3>Interfaces</h3><ul><li><a href="Task.html">Task</a></li></ul><h3>Global</h3><ul><li><a href="global.html#queryResult">queryResult</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-pg-promise.html">pg-promise</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-PG.html">PG</a></li><li><a href="external-pg-minify.html">pg-minify</a></li><li><a href="external-pg-pool.html">pg-pool</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-RangeError.html">RangeError</a></li><li><a href="external-spex.html">spex</a></li><li><a href="external-Stream.html">Stream</a></li><li><a href="external-TypeError.html">TypeError</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a></li><li><a href="errors.ParameterizedQueryError.html">ParameterizedQueryError</a></li><li><a href="errors.PreparedStatementError.html">PreparedStatementError</a></li><li><a href="errors.QueryFileError.html">QueryFileError</a></li><li><a href="errors.QueryResultError.html">QueryResultError</a></li><li><a href="helpers.Column.html">Column</a></li><li><a href="helpers.ColumnSet.html">ColumnSet</a></li><li><a href="helpers.TableName.html">TableName</a></li><li><a href="ParameterizedQuery.html">ParameterizedQuery</a></li><li><a href="PreparedStatement.html">PreparedStatement</a></li><li><a href="PromiseAdapter.html">PromiseAdapter</a></li><li><a href="QueryFile.html">QueryFile</a></li><li><a href="txMode.TransactionMode.html">TransactionMode</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:connect">connect</a></li><li><a href="global.html#event:disconnect">disconnect</a></li><li><a href="global.html#event:error">error</a></li><li><a href="global.html#event:extend">extend</a></li><li><a href="global.html#event:query">query</a></li><li><a href="global.html#event:receive">receive</a></li><li><a href="global.html#event:task">task</a></li><li><a href="global.html#event:transact">transact</a></li></ul><h3>Namespaces</h3><ul><li><a href="errors.html">errors</a></li><li><a href="formatting.html">formatting</a></li><li><a href="helpers.html">helpers</a></li><li><a href="txMode.html">txMode</a></li><li><a href="utils.html">utils</a></li></ul><h3>Interfaces</h3><ul><li><a href="Task.html">Task</a></li></ul><h3>Global</h3><ul><li><a href="global.html#queryResult">queryResult</a></li></ul>
     <div class="home-link">
         <a href="https://github.com/vitaly-t/pg-promise">&lt;&lt; GitHub</a>
     </div>
@@ -53,10 +53,7 @@ const queryResultErrorCode = {
     notEmpty: 1,
 
     /** Multiple rows were not expected. */
-    multiRow: 2,
-
-    /** Multiple results were not expected. */
-    multiResult: 3
+    multiple: 2
 };
 
 Object.freeze(queryResultErrorCode);
@@ -64,8 +61,7 @@ Object.freeze(queryResultErrorCode);
 const errorMessages = [
     {name: 'noData', message: 'No data returned from the query.'},
     {name: 'notEmpty', message: 'No return data was expected.'},
-    {name: 'multiRow', message: 'Multiple rows were not expected.'},
-    {name: 'multiResult', message: 'Multiple results were not expected.'}
+    {name: 'multiple', message: 'Multiple rows were not expected.'}
 ];
 
 /**
@@ -81,10 +77,9 @@ const errorMessages = [
  *
  * Supported errors:
  *
- * - `No return data was expected.`, for method {@link Database#none none}
- * - `No data returned from the query.`, for methods {@link Database#one one} and {@link Database#many many}
- * - `Multiple rows were not expected.`, for methods {@link Database#one one} and {@link Database#oneOrNone oneOrNone}
- * - `Multiple results were not expected.`, for all methods, except {@link Database#multi multi} and {@link Database#multiResult multiResult}
+ * - `No return data was expected.`, method {@link Database#none none}
+ * - `No data returned from the query.`, methods {@link Database#one one} and {@link Database#many many}
+ * - `Multiple rows were not expected.`, methods {@link Database#one one} and {@link Database#oneOrNone oneOrNone}
  *
  * Like any other error, this one is notified with through the global event {@link event:error error}.
  *
@@ -100,11 +95,10 @@ const errorMessages = [
  * Standard {@link external:Error Error} property - the stack trace.
  *
  * @property {object} result
- * The original $[Result] object that was received. In case of a multi-result, it is an array of $[Result] objects.
+ * The original $[Result] object that was received.
  *
- * @property {number} [received]
- * Total number of rows received (it is simply the value of `result.rows.length`).
- * The value is not set in case of a multi-result.
+ * @property {number} received
+ * Total number of rows received. It is simply the value of `result.rows.length`.
  *
  * @property {number} code
  * Error code - {@link errors.queryResultErrorCode queryResultErrorCode} value.
@@ -161,9 +155,7 @@ function QueryResultError(code, result, query, values) {
     this.result = result;
     this.query = query;
     this.values = values;
-    if (!Array.isArray(result)) {
-        this.received = result.rows.length;
-    }
+    this.received = result.rows.length;
 }
 
 QueryResultError.prototype = Object.create(Error.prototype, {

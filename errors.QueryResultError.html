@@ -13,7 +13,7 @@
 <body>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-pg-promise.html">pg-promise</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a></li><li><a href="errors.ParameterizedQueryError.html">ParameterizedQueryError</a></li><li><a href="errors.PreparedStatementError.html">PreparedStatementError</a></li><li><a href="errors.QueryFileError.html">QueryFileError</a></li><li><a href="errors.QueryResultError.html">QueryResultError</a></li><li><a href="helpers.Column.html">Column</a></li><li><a href="helpers.ColumnSet.html">ColumnSet</a></li><li><a href="helpers.TableName.html">TableName</a></li><li><a href="ParameterizedQuery.html">ParameterizedQuery</a></li><li><a href="PreparedStatement.html">PreparedStatement</a></li><li><a href="PromiseAdapter.html">PromiseAdapter</a></li><li><a href="QueryFile.html">QueryFile</a></li><li><a href="txMode.TransactionMode.html">TransactionMode</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:connect">connect</a></li><li><a href="global.html#event:disconnect">disconnect</a></li><li><a href="global.html#event:error">error</a></li><li><a href="global.html#event:extend">extend</a></li><li><a href="global.html#event:query">query</a></li><li><a href="global.html#event:receive">receive</a></li><li><a href="global.html#event:task">task</a></li><li><a href="global.html#event:transact">transact</a></li></ul><h3>Namespaces</h3><ul><li><a href="errors.html">errors</a></li><li><a href="formatting.html">formatting</a></li><li><a href="helpers.html">helpers</a></li><li><a href="txMode.html">txMode</a></li><li><a href="utils.html">utils</a></li></ul><h3>Interfaces</h3><ul><li><a href="Task.html">Task</a></li></ul><h3>Global</h3><ul><li><a href="global.html#queryResult">queryResult</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-pg-promise.html">pg-promise</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-PG.html">PG</a></li><li><a href="external-pg-minify.html">pg-minify</a></li><li><a href="external-pg-pool.html">pg-pool</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-RangeError.html">RangeError</a></li><li><a href="external-spex.html">spex</a></li><li><a href="external-Stream.html">Stream</a></li><li><a href="external-TypeError.html">TypeError</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a></li><li><a href="errors.ParameterizedQueryError.html">ParameterizedQueryError</a></li><li><a href="errors.PreparedStatementError.html">PreparedStatementError</a></li><li><a href="errors.QueryFileError.html">QueryFileError</a></li><li><a href="errors.QueryResultError.html">QueryResultError</a></li><li><a href="helpers.Column.html">Column</a></li><li><a href="helpers.ColumnSet.html">ColumnSet</a></li><li><a href="helpers.TableName.html">TableName</a></li><li><a href="ParameterizedQuery.html">ParameterizedQuery</a></li><li><a href="PreparedStatement.html">PreparedStatement</a></li><li><a href="PromiseAdapter.html">PromiseAdapter</a></li><li><a href="QueryFile.html">QueryFile</a></li><li><a href="txMode.TransactionMode.html">TransactionMode</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:connect">connect</a></li><li><a href="global.html#event:disconnect">disconnect</a></li><li><a href="global.html#event:error">error</a></li><li><a href="global.html#event:extend">extend</a></li><li><a href="global.html#event:query">query</a></li><li><a href="global.html#event:receive">receive</a></li><li><a href="global.html#event:task">task</a></li><li><a href="global.html#event:transact">transact</a></li></ul><h3>Namespaces</h3><ul><li><a href="errors.html">errors</a></li><li><a href="formatting.html">formatting</a></li><li><a href="helpers.html">helpers</a></li><li><a href="txMode.html">txMode</a></li><li><a href="utils.html">utils</a></li></ul><h3>Interfaces</h3><ul><li><a href="Task.html">Task</a></li></ul><h3>Global</h3><ul><li><a href="global.html#queryResult">queryResult</a></li></ul>
     <div class="home-link">
         <a href="https://github.com/vitaly-t/pg-promise">&lt;&lt; GitHub</a>
     </div>
@@ -55,10 +55,9 @@ the expectation, i.e. when a query result doesn't match its Query Result Mask - 
 <a href="Database.html#one">one</a>, <a href="Database.html#oneOrNone">oneOrNone</a> and <a href="Database.html#many">many</a>.</p>
 <p>Supported errors:</p>
 <ul>
-<li><code>No return data was expected.</code>, for method <a href="Database.html#none">none</a></li>
-<li><code>No data returned from the query.</code>, for methods <a href="Database.html#one">one</a> and <a href="Database.html#many">many</a></li>
-<li><code>Multiple rows were not expected.</code>, for methods <a href="Database.html#one">one</a> and <a href="Database.html#oneOrNone">oneOrNone</a></li>
-<li><code>Multiple results were not expected.</code>, for all methods, except <a href="Database.html#multi">multi</a> and <a href="Database.html#multiResult">multiResult</a></li>
+<li><code>No return data was expected.</code>, method <a href="Database.html#none">none</a></li>
+<li><code>No data returned from the query.</code>, methods <a href="Database.html#one">one</a> and <a href="Database.html#many">many</a></li>
+<li><code>Multiple rows were not expected.</code>, methods <a href="Database.html#one">one</a> and <a href="Database.html#oneOrNone">oneOrNone</a></li>
 </ul>
 <p>Like any other error, this one is notified with through the global event <a href="global.html#event:error">error</a>.</p>
 <p>The type is available from the <a href="errors.html">errors</a> namespace.</p>
@@ -90,8 +89,6 @@ the expectation, i.e. when a query result doesn't match its Query Result Mask - 
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -117,12 +114,6 @@ the expectation, i.e. when a query result doesn't match its Query Result Mask - 
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-                </td>
-            
 
             
 
@@ -145,12 +136,6 @@ the expectation, i.e. when a query result doesn't match its Query Result Mask - 
             
             </td>
 
-            
-                <td class="attributes">
-                
-
-                
-                </td>
             
 
             
@@ -175,12 +160,6 @@ the expectation, i.e. when a query result doesn't match its Query Result Mask - 
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-                </td>
-            
 
             
 
@@ -204,16 +183,10 @@ the expectation, i.e. when a query result doesn't match its Query Result Mask - 
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last"><p>The original <a href="https://github.com/brianc/node-postgres/blob/master/lib/result.js#L14">Result</a> object that was received. In case of a multi-result, it is an array of <a href="https://github.com/brianc/node-postgres/blob/master/lib/result.js#L14">Result</a> objects.</p></td>
+            <td class="description last"><p>The original <a href="https://github.com/brianc/node-postgres/blob/master/lib/result.js#L14">Result</a> object that was received.</p></td>
         </tr>
 
     
@@ -233,19 +206,10 @@ the expectation, i.e. when a query result doesn't match its Query Result Mask - 
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last"><p>Total number of rows received (it is simply the value of <code>result.rows.length</code>).
-The value is not set in case of a multi-result.</p></td>
+            <td class="description last"><p>Total number of rows received. It is simply the value of <code>result.rows.length</code>.</p></td>
         </tr>
 
     
@@ -264,12 +228,6 @@ The value is not set in case of a multi-result.</p></td>
             
             </td>
 
-            
-                <td class="attributes">
-                
-
-                
-                </td>
             
 
             
@@ -293,12 +251,6 @@ The value is not set in case of a multi-result.</p></td>
             
             </td>
 
-            
-                <td class="attributes">
-                
-
-                
-                </td>
             
 
             
@@ -324,12 +276,6 @@ But if you are using initialization option <code>pgFormatting</code>, then the q
             
             </td>
 
-            
-                <td class="attributes">
-                
-
-                
-                </td>
             
 
             
@@ -374,7 +320,7 @@ Otherwise, the values are within the pre-formatted <code>query</code> string.</p
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="errors_queryResult.js.html">errors/queryResult.js</a>, <a href="errors_queryResult.js.html#line42">line 42</a>
+        <a href="errors_queryResult.js.html">errors/queryResult.js</a>, <a href="errors_queryResult.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -567,7 +513,7 @@ Otherwise, the values are within the pre-formatted <code>query</code> string.</p
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="errors_queryResult.js.html">errors/queryResult.js</a>, <a href="errors_queryResult.js.html#line148">line 148</a>
+        <a href="errors_queryResult.js.html">errors/queryResult.js</a>, <a href="errors_queryResult.js.html#line140">line 140</a>
     </li></ul></dd>
     
 
